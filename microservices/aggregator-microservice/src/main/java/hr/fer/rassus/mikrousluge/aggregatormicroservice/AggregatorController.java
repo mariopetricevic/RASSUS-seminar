@@ -14,7 +14,7 @@ public class AggregatorController {
 	@Autowired
 	private RetrofitImplementation service;
 	
-	@Value("${unit:}")
+	@Value("${temperature.unit}")
 	private String mjernajedinica;
 	
 	
