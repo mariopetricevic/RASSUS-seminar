@@ -1,6 +1,2 @@
-temperature.unit=C
-tempservice.name=temperature-ms
-humidityservice.name=humidity-ms
-
 my:
   greeting: Hello world
