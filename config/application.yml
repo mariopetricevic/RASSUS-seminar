@@ -3,4 +3,4 @@ tempservice.name=temperature-ms
 humidityservice.name=humidity-ms
 
 my:
-  greetings:Hello world
+  greeting: Hello world
