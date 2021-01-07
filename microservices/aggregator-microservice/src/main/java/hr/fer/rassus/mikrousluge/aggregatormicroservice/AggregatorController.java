@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.netflix.discovery.DiscoveryClient;
+import com.netflix.discovery.EurekaClient;
+
 
 @RestController
 public class AggregatorController {
@@ -16,14 +19,20 @@ public class AggregatorController {
 	@Autowired
 	private RetrofitImplementation service;
 	
-	@Value("${msg: default}")
-	private String msg;
 	
 	
-	@GetMapping("/msg")
+	@Value("${unit: default}")
+	private String unit;
+	@Value("${temperature-service.name: deftemp}")
+	private String temperatureServiceName;
+	@Value("${humidity-service.name: defhum}")
+	private String humidityServiceName;
+	
+	
+	@GetMapping("/unit")
 	public String getMsg()
 	{
-		return this.msg;
+		return this.unit;
 	}
 	
 
@@ -31,14 +40,24 @@ public class AggregatorController {
 	@GetMapping("/readings")
 	public String getReadings()
 	{
-		//Map<String,String> map=new HashMap<>();
-		String temperature="Temperature: "+ service.getTemperature().getTemperature().toString();
-		String humidity="Humidity: "+ service.getHumidity().getHumidity().toString();
-		String reading=temperature+ "<br>"+ humidity+"%" + msg;
-		//map.put(service.getTemperature().getTemperature(), service.getHumidity().getHumidity());
-		//map.put(temperature, humidity);
-		//return map;
-		return reading;
+		int temp;
+		String temperatureInKelvin;
+		if (unit.equals("K"))
+		{
+			temp=Integer.parseInt(service.getTemperature().getTemperature());
+			temp=temp+273;
+			temperatureInKelvin=String.valueOf(temp);
+			String temperature="Temperature: "+ temperatureInKelvin + " "+ unit;
+			String humidity="Humidity: "+ service.getHumidity().getHumidity().toString();
+			String reading=temperature+ "<br>"+ humidity+"%";
+			
+			return reading;
+		}
+		else
+		{
+			return "Temperature: "+ service.getTemperature().getTemperature().toString()+ "C, Humidity: "+service.getHumidity().getHumidity().toString()+"%";
+		}
+		
 	}
 	
 }
