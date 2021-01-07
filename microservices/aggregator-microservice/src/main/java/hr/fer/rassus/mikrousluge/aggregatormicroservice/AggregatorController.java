@@ -15,7 +15,7 @@ public class AggregatorController {
 	@Autowired
 	private RetrofitImplementation service;
 	
-	@Value("${msg:}")
+	@Value("${msg: default}")
 	private String msg;
 	
 	
@@ -24,6 +24,8 @@ public class AggregatorController {
 	{
 		return this.msg;
 	}
+	
+
 	
 	@GetMapping("/readings")
 	public String getReadings()
