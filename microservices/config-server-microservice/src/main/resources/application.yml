@@ -1,0 +1,13 @@
+server:
+  port: 8888
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/mariopetricevic/RASSUS-seminar.git
+          cloneOnStart: true
+          searchPaths: config
+logging:
+  level:
+    org.springframework.cloud.config.server: DEBUG

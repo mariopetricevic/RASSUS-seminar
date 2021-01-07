@@ -10,16 +10,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
 public class AggregatorController {
 
 	@Autowired
 	private RetrofitImplementation service;
 	
-	@Value("${temperature.unit}")
-	private String mjernajedinica;
+	@Value("${msg:}")
+	private String msg;
 	
 	
+	@GetMapping("/msg")
+	public String getMsg()
+	{
+		return this.msg;
+	}
 	
 	@GetMapping("/readings")
 	public String getReadings()
@@ -27,7 +31,7 @@ public class AggregatorController {
 		//Map<String,String> map=new HashMap<>();
 		String temperature="Temperature: "+ service.getTemperature().getTemperature().toString();
 		String humidity="Humidity: "+ service.getHumidity().getHumidity().toString();
-		String reading=temperature+ "<br>"+ humidity+"%" + mjernajedinica;
+		String reading=temperature+ "<br>"+ humidity+"%" + msg;
 		//map.put(service.getTemperature().getTemperature(), service.getHumidity().getHumidity());
 		//map.put(temperature, humidity);
 		//return map;

@@ -12,4 +12,6 @@ public class ConfigServerMicroserviceApplication {
 		SpringApplication.run(ConfigServerMicroserviceApplication.class, args);
 	}
 
+	
+	
 }
