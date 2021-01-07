@@ -15,7 +15,7 @@ public class AggregatorMicroserviceApplication{
 	
 
 	public static void main(String[] args) {
-		
+		System.setProperty("spring.cloud.bootstrap.enabled","true");
 		SpringApplication.run(AggregatorMicroserviceApplication.class, args);
 	}
 	
