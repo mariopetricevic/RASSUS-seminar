@@ -16,24 +16,25 @@ public class RetrofitImplementation implements RestInterface{
 	private TemperatureApi temperatureApi;
 	private String temperatureURL, humidityURL;
 	
-	
-
-	
 	public RetrofitImplementation()
 	{
-		temperatureURL="http://localhost:8081";
-		humidityURL="http://localhost:8082";
 		
-		Retrofit retrofit1 = new Retrofit.Builder().baseUrl(temperatureURL)
-				.addConverterFactory(JacksonConverterFactory.create()).build();
+	}
+	
+	public RetrofitImplementation(String url1, String url2)
+	{
+		this.humidityURL=url2;
+		this.temperatureURL=url1;
 		
-		Retrofit retrofit2 = new Retrofit.Builder().baseUrl(humidityURL)
-				.addConverterFactory(JacksonConverterFactory.create()).build();
+		Retrofit retrofit1 = new Retrofit.Builder().baseUrl(url1).addConverterFactory(JacksonConverterFactory.create())
+				.build();
 		
+		Retrofit retrofit2 = new Retrofit.Builder().baseUrl(url2).addConverterFactory(JacksonConverterFactory.create())
+				.build();
+
 		temperatureApi=retrofit1.create(TemperatureApi.class);
 		humidityApi=retrofit2.create(HumidityApi.class);
 	}
-
 	@Override
 	public TemperatureReading getTemperature() {
 		try {
