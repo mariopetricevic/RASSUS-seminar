@@ -15,7 +15,7 @@ services:
     humidity-microservice:
         image: humidity-microservice-jib:0.0.1-SNAPSHOT
         ports:
-            - "8080:8080"
+            - "8082:8082"
         depends_on:
             - config-server-microservice
             - eureka-server
@@ -34,7 +34,7 @@ services:
             - -Djava.security.egd=file:/dev/./urandom
             - -cp
             - /app/resources:/app/classes:/app/libs/*
-            - hr.fer.rassus.labpro.grupa23.humidityMicroservice.HumidityMicroserviceApplication
+            - hr.fer.rassus.mikrousluge.humiditymicroservice.HumidityMicroserviceApplication
         environment:
             EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
             SPRING_CLOUD_CONFIG_URI: http://config-server-microservice:8888
@@ -61,7 +61,7 @@ services:
             - -Djava.security.egd=file:/dev/./urandom
             - -cp
             - /app/resources:/app/classes:/app/libs/*
-            - hr.fer.rassus.labpro.grupa23.temperatureMicroservice.TemperatureMicroserviceApplication
+            - hr.fer.rassus.mikrousluge.temperaturemicroservice.TemperatureMicroserviceApplication
         environment:
             EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
             SPRING_CLOUD_CONFIG_URI: http://config-server-microservice:8888
@@ -69,7 +69,7 @@ services:
     aggregator-microservice:
         image: aggregator-microservice-jib:0.0.1-SNAPSHOT
         ports:
-            - "8082:8082"
+            - "8080:8080"
         depends_on:
             - config-server-microservice
             - eureka-server
@@ -100,7 +100,7 @@ services:
             - -Djava.security.egd=file:/dev/./urandom
             - -cp
             - /app/resources:/app/classes:/app/libs/*
-            - hr.fer.rassus.labpro.grupa23.aggregatorMicroservice.AggregatorMicroserviceApplication
+            - hr.fer.rassus.mikrousluge.aggregatormicroservice.AggregatorMicroserviceApplication
         environment:
             EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
             SPRING_CLOUD_CONFIG_URI: http://config-server-microservice:8888
