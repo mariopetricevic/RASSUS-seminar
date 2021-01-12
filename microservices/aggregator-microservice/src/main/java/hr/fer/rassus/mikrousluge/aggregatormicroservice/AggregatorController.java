@@ -21,7 +21,7 @@ import com.netflix.discovery.shared.Application;
 @RestController
 @RequestMapping("/")
 public class AggregatorController {
-	static Application app;
+	
 	static RestInterface service;
 
 	//@Autowired
@@ -32,11 +32,7 @@ public class AggregatorController {
 	
 	@Value("${unit: default}")
 	private String unit;
-	@GetMapping("/unit")
-	public String getMsg()
-	{
-		return this.unit;
-	}
+	
 	@Value("${temperature-service.name: deftemp}")
 	private String temperatureServiceName;
 	
