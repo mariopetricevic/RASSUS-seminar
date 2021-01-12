@@ -1,0 +1,106 @@
+version: "3.7"
+services:
+    config-server-microservice:
+        image: config-server-microservice-jib:0.0.1-SNAPSHOT
+        ports:
+            - "8888:8888"
+
+    eureka-server:
+        image: eureka-server-jib:0.0.1-SNAPSHOT
+        ports:
+            - "8761:8761"
+        environment:
+            EUREKA_INSTANCE_HOSTNAME: eureka-server
+
+    humidity-microservice:
+        image: humidity-microservice-jib:0.0.1-SNAPSHOT
+        ports:
+            - "8082:8082"
+        depends_on:
+            - config-server-microservice
+            - eureka-server
+        entrypoint:
+            - /wait-for-it.sh
+            - config-server-microservice:8888
+            - --timeout=60
+            - --strict
+            - --
+            - /wait-for-it.sh
+            - eureka-server:8761
+            - --timeout=60
+            - --strict
+            - --
+            - java
+            - -Djava.security.egd=file:/dev/./urandom
+            - -cp
+            - /app/resources:/app/classes:/app/libs/*
+            - hr.fer.rassus.mikrousluge.humiditymicroservice.HumidityMicroserviceApplication
+        environment:
+            EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+            SPRING_CLOUD_CONFIG_URI: http://config-server-microservice:8888
+
+    temperature-microservice:
+        image: temperature-microservice-jib:0.0.1-SNAPSHOT
+        ports:
+            - "8081:8081"
+        depends_on:
+            - config-server-microservice
+            - eureka-server
+        entrypoint:
+            - /wait-for-it.sh
+            - config-server-microservice:8888
+            - --timeout=60
+            - --strict
+            - --
+            - /wait-for-it.sh
+            - eureka-server:8761
+            - --timeout=60
+            - --strict
+            - --
+            - java
+            - -Djava.security.egd=file:/dev/./urandom
+            - -cp
+            - /app/resources:/app/classes:/app/libs/*
+            - hr.fer.rassus.mikrousluge.temperaturemicroservice.TemperatureMicroserviceApplication
+        environment:
+            EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+            SPRING_CLOUD_CONFIG_URI: http://config-server-microservice:8888
+
+    aggregator-microservice:
+        image: aggregator-microservice-jib:0.0.1-SNAPSHOT
+        ports:
+            - "8080:8080"
+        depends_on:
+            - config-server-microservice
+            - eureka-server
+            - humidity-microservice
+            - temperature-microservice
+        entrypoint:
+            - /wait-for-it.sh
+            - config-server-microservice:8888
+            - --timeout=60
+            - --strict
+            - --
+            - /wait-for-it.sh
+            - eureka-server:8761
+            - --timeout=60
+            - --strict
+            - --
+            - /wait-for-it.sh
+            - humidity-microservice:8080
+            - --timeout=60
+            - --strict
+            - --
+            - /wait-for-it.sh
+            - temperature-microservice:8081
+            - --timeout=60
+            - --strict
+            - --
+            - java
+            - -Djava.security.egd=file:/dev/./urandom
+            - -cp
+            - /app/resources:/app/classes:/app/libs/*
+            - hr.fer.rassus.mikrousluge.aggregatormicroservice.AggregatorMicroserviceApplication
+        environment:
+            EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+            SPRING_CLOUD_CONFIG_URI: http://config-server-microservice:8888
