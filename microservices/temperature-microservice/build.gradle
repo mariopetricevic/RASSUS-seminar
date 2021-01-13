@@ -50,7 +50,7 @@ jib {
   	}
   
 	container {
-  		appRoot = '/opt'
+  		appRoot = '/app'
   		ports = ['8081']
   		jvmFlags = ['-Djava.security.egd=file:/dev/./urandom']
   		extraDirectories {
